@@ -28,6 +28,7 @@
       position:relative;
     }
 
+    /* vignette behind everything */
     body::before{
       content:"";
       position:fixed;
@@ -38,27 +39,88 @@
       z-index:0;
     }
 
+    /* FLASH */
+    .flash{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:9998;
+      opacity:0;
+      mix-blend-mode:screen;
+      background: radial-gradient(circle at center,
+        rgba(255,245,200,1) 0%,
+        rgba(255,220,140,0.95) 18%,
+        rgba(255,190,90,0.75) 38%,
+        rgba(255,160,60,0.35) 58%,
+        rgba(0,0,0,0) 78%);
+    }
+    .flash.active{
+      animation: megaFlash 2.2s cubic-bezier(.05,.95,.2,1) forwards;
+    }
+    @keyframes megaFlash{
+      0%   { opacity:0; filter: blur(0px); }
+      6%   { opacity:1; filter: blur(0px); }
+      18%  { opacity:1; filter: blur(1px); }
+      40%  { opacity:0.65; filter: blur(2px); }
+      70%  { opacity:0.25; filter: blur(3px); }
+      100% { opacity:0; filter: blur(0px); }
+    }
+
+    /* SHAKE (subtle but present) */
+    .shake{
+      animation: violentShake 1.3s cubic-bezier(.08,.92,.18,1);
+      transform-origin:center;
+    }
+    @keyframes violentShake{
+      0%   { transform: translate(0,0) scale(1); }
+      10%  { transform: translate(-14px,10px) scale(1.02) rotate(-0.5deg); }
+      20%  { transform: translate(15px,-11px) scale(1.03) rotate(0.6deg); }
+      32%  { transform: translate(-16px,12px) scale(1.03) rotate(-0.6deg); }
+      46%  { transform: translate(16px,-12px) scale(1.03) rotate(0.6deg); }
+      65%  { transform: translate(-8px,6px) scale(1.01) rotate(-0.25deg); }
+      82%  { transform: translate(8px,-6px) scale(1.01) rotate(0.25deg); }
+      100% { transform: translate(0,0) scale(1) rotate(0deg); }
+    }
+
+    /* Overlay */
+    #startOverlay{
+      position:fixed;
+      inset:0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      background:#000;
+      color:var(--gold);
+      font-size:22px;
+      letter-spacing:2px;
+      cursor:pointer;
+      z-index:9999;
+      transition:opacity 1.3s ease;
+      text-align:center;
+      padding:24px;
+    }
+    #startOverlay small{
+      display:block;
+      margin-top:10px;
+      font-size:13px;
+      color:rgba(216,202,166,0.7);
+      letter-spacing:3px;
+      text-transform:uppercase;
+    }
+
     .container{
       position:relative;
       z-index:2;
       width:min(920px, 92vw);
-      padding:78px 22px 110px;
+      padding:86px 22px 110px;
       text-align:center;
       opacity:0;
       transform:translateY(14px);
-      animation:sceneIn 1.6s ease-out 0.25s forwards;
+      animation:sceneIn 1.6s ease-out 0.6s forwards;
     }
-
     @keyframes sceneIn{
       to{opacity:1;transform:translateY(0);}
-    }
-
-    .kicker{
-      font-size:12px;
-      letter-spacing:3px;
-      text-transform:uppercase;
-      color:rgba(216,202,166,0.65);
-      margin:0 0 18px 0;
     }
 
     .gate{
@@ -70,11 +132,33 @@
     }
 
     h1{
+      position:relative;
       font-size:56px;
       color:var(--gold);
       margin:0 0 10px 0;
       letter-spacing:2px;
       text-shadow:0 0 26px rgba(224,195,107,0.22);
+      opacity:0;
+      transform:translateY(10px);
+      animation:titleIn 1.4s ease-out 1.0s forwards;
+    }
+    @keyframes titleIn{
+      to{opacity:1;transform:translateY(0);}
+    }
+
+    /* glow pulse layer */
+    h1.glow::after{
+      content: attr(data-text);
+      position:absolute;
+      inset:0;
+      color:transparent;
+      text-shadow: 0 0 22px rgba(255,210,110,0.35);
+      pointer-events:none;
+      animation: extremeGlow 2.2s ease-in-out infinite alternate;
+    }
+    @keyframes extremeGlow{
+      from{ text-shadow:0 0 18px rgba(255,200,80,0.35), 0 0 30px rgba(255,230,140,0.25); }
+      to  { text-shadow:0 0 45px rgba(255,220,120,0.9), 0 0 90px rgba(255,240,190,0.55); }
     }
 
     .divider{
@@ -89,26 +173,40 @@
       line-height:1.95;
       margin:0 0 14px 0;
       color:var(--ink);
+      opacity:0;
+      transform:translateY(8px);
+      filter:blur(1.2px);
+      animation:paraIn 0.95s ease-out forwards;
+    }
+    p:nth-of-type(1){animation-delay:1.4s;}
+    p:nth-of-type(2){animation-delay:1.65s;}
+    p:nth-of-type(3){animation-delay:1.9s;}
+    p:nth-of-type(4){animation-delay:2.15s;}
+    p:nth-of-type(5){animation-delay:2.4s;}
+    p:nth-of-type(6){animation-delay:2.65s;}
+    p:nth-of-type(7){animation-delay:2.9s;}
+    p:nth-of-type(8){animation-delay:3.15s;}
+    p:nth-of-type(9){animation-delay:3.4s;}
+    p:nth-of-type(10){animation-delay:3.65s;}
+    p:nth-of-type(11){animation-delay:3.9s;}
+    p:nth-of-type(12){animation-delay:4.15s;}
+    p:nth-of-type(13){animation-delay:4.4s;}
+
+    @keyframes paraIn{
+      to{opacity:1;transform:translateY(0);filter:blur(0);}
     }
 
     p em{
       color:rgba(224,195,107,0.85);
       font-style:italic;
     }
-
     p strong{
       color:rgba(255,240,190,0.95);
       font-weight:700;
     }
 
-    .muted{
-      color:var(--muted);
-      font-size:16px;
-      margin-top:16px;
-    }
-
     .trial{
-      margin:48px auto 0;
+      margin:52px auto 0;
       width:min(760px, 92vw);
       border:1px solid var(--line);
       background:linear-gradient(to bottom, rgba(0,0,0,0.32), rgba(0,0,0,0.18));
@@ -116,6 +214,12 @@
       padding:26px 22px 22px;
       box-shadow:0 12px 55px rgba(0,0,0,0.35);
       text-align:center;
+      opacity:0;
+      transform:translateY(10px);
+      animation:trialIn 1.0s ease-out 4.6s forwards;
+    }
+    @keyframes trialIn{
+      to{opacity:1;transform:translateY(0);}
     }
 
     .trial h2{
@@ -125,11 +229,14 @@
       text-transform:uppercase;
       font-size:18px;
     }
-
     .trial p{
       margin:0 0 10px 0;
       font-size:18px;
       color:rgba(216,202,166,0.92);
+      opacity:1;
+      transform:none;
+      filter:none;
+      animation:none;
     }
 
     .hint{
@@ -168,10 +275,7 @@
       letter-spacing:1px;
       font-weight:600;
     }
-
-    button:hover{
-      background:rgba(224,195,107,0.18);
-    }
+    button:hover{ background:rgba(224,195,107,0.18); }
 
     .msg{
       margin-top:14px;
@@ -183,14 +287,23 @@
 </head>
 
 <body>
-  <div class="container">
+  <div class="flash" id="flashEffect"></div>
 
-    <div class="kicker">THE FIRST TRIAL IS MOVEMENT</div>
+  <!-- optional ambience (put wind.mp3 in same repo like you did) -->
+  <audio id="windAudio" loop>
+    <source src="wind.mp3" type="audio/mpeg">
+  </audio>
+
+  <div id="startOverlay" onclick="startExperience()">
+    Click to Breathe
+    <small>GATE I</small>
+  </div>
+
+  <div class="container" id="scene">
     <div class="gate">GATE I</div>
-    <h1>AIR</h1>
+    <h1 id="title" class="" data-text="AIR">AIR</h1>
     <div class="divider"></div>
 
-    <!-- Intro to Air (new) -->
     <p><em>The first element you shall learn is Air.</em></p>
     <p>It cannot be grasped, yet it surrounds you.</p>
     <p>It bends without breaking.<br>
@@ -216,26 +329,54 @@
 
       <div class="msg" id="msg"></div>
     </div>
-
   </div>
 
   <script>
-    // NOTE: This is a placeholder check. Replace the target + answer when you're ready.
+    function startExperience(){
+      const overlay = document.getElementById("startOverlay");
+      const audio   = document.getElementById("windAudio");
+      const flash   = document.getElementById("flashEffect");
+      const scene   = document.getElementById("scene");
+      const title   = document.getElementById("title");
+
+      overlay.style.opacity = "0";
+      setTimeout(()=> overlay.remove(), 1300);
+
+      flash.classList.add("active");
+      scene.classList.add("shake");
+      title.classList.add("glow");
+      setTimeout(()=> scene.classList.remove("shake"), 1300);
+
+      // ambience fade-in
+      audio.volume = 0;
+      audio.play().catch(()=>{});
+      const fade = setInterval(()=>{
+        if(audio.volume < 0.18) audio.volume = Math.min(0.18, audio.volume + 0.01);
+        else clearInterval(fade);
+      }, 120);
+    }
+
+    // password = MENTAL
     function unlock(){
       const v = (document.getElementById('answer').value || '').trim().toLowerCase();
       const msg = document.getElementById('msg');
-
-      // example expected word; change it later
-      const expected = "breathe";
+      const expected = "mental";
 
       if(v === expected){
         msg.textContent = "Accepted. The air yields.";
-        // TODO: redirect to the next page when ready:
-        // window.location.href = "air01.html";
+        // window.location.href = "air01.html"; // set later
       } else {
         msg.textContent = "No. Air does not yield to that.";
       }
     }
+
+    // Enter key submits
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        const el = document.getElementById('answer');
+        if(el && document.activeElement === el) unlock();
+      }
+    });
   </script>
 </body>
 </html>
