@@ -45,6 +45,31 @@
       font-size: 19px;
       opacity: 0.9;
     }
+    .container{
+  opacity: 0;
+  transform: translateY(10px);
+  animation: reveal 1.8s ease-out forwards;
+}
+
+@keyframes reveal{
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* נשימה ממש עדינה לטקסט (לא מעייף) */
+p{
+  animation: breathe 6.5s ease-in-out infinite;
+}
+
+@keyframes breathe{
+  0%,100% { opacity: 0.92; }
+  50%     { opacity: 1; }
+}
+
+/* מכבד נגישות: אם למישהו יש reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .container, p { animation: none; }
+  .container { opacity: 1; transform: none; }
+}
   </style>
 </head>
 
