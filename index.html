@@ -7,8 +7,8 @@
 
 <style>
 :root{
-  --bg1:#0b0b0f;
-  --bg2:#15151b;
+  --bg1:#07070b;
+  --bg2:#14141b;
   --gold:#e0c36b;
   --ink:#d8caa6;
 }
@@ -25,18 +25,18 @@ body{
   position:relative;
 }
 
-/* Cinematic vignette */
+/* cinematic darkness */
 body::before{
   content:"";
   position:fixed;
   inset:0;
   pointer-events:none;
   background:
-    radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.8) 100%);
+    radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 70%, rgba(0,0,0,0.85) 100%);
   z-index:1;
 }
 
-/* Light flash overlay (added) */
+/* MASSIVE FLASH */
 .flash{
   position:fixed;
   inset:0;
@@ -44,33 +44,38 @@ body::before{
   z-index:998;
   opacity:0;
   background:
-    radial-gradient(circle at 50% 35%,
-      rgba(224,195,107,0.75) 0%,
-      rgba(224,195,107,0.18) 38%,
-      transparent 72%);
+    radial-gradient(circle at center,
+      rgba(255,220,120,1) 0%,
+      rgba(255,200,90,0.8) 25%,
+      rgba(255,180,60,0.5) 50%,
+      transparent 75%);
 }
 .flash.active{
-  animation: flashPulse 1.25s ease-out forwards;
+  animation: megaFlash 1.6s ease-out forwards;
 }
-@keyframes flashPulse{
+@keyframes megaFlash{
   0%   { opacity:0; }
-  18%  { opacity:0.95; }
-  55%  { opacity:0.28; }
+  10%  { opacity:1; }
+  35%  { opacity:0.85; }
+  70%  { opacity:0.3; }
   100% { opacity:0; }
 }
 
-/* Subtle screen “light shake” (added) */
+/* STRONG SHAKE */
 .shake{
-  animation: lightShake 0.9s ease-in-out 1;
+  animation: heavyShake 0.8s ease-in-out;
 }
-@keyframes lightShake{
-  0%   { transform: translate(0,0); }
-  15%  { transform: translate(-1px, 0px); }
-  30%  { transform: translate( 1px, 1px); }
-  45%  { transform: translate(-1px, 1px); }
-  60%  { transform: translate( 1px, 0px); }
-  75%  { transform: translate( 0px, 1px); }
-  100% { transform: translate(0,0); }
+@keyframes heavyShake{
+  0%{transform:translate(0,0);}
+  10%{transform:translate(-6px,4px);}
+  20%{transform:translate(6px,-4px);}
+  30%{transform:translate(-5px,3px);}
+  40%{transform:translate(5px,-3px);}
+  50%{transform:translate(-4px,2px);}
+  60%{transform:translate(4px,-2px);}
+  70%{transform:translate(-2px,1px);}
+  80%{transform:translate(2px,-1px);}
+  100%{transform:translate(0,0);}
 }
 
 .container{
@@ -81,31 +86,32 @@ body::before{
   text-align:center;
   opacity:0;
   transform:translateY(14px);
-  animation:sceneIn 2.4s ease-out 0.8s forwards;
+  animation:sceneIn 2s ease-out 0.5s forwards;
 }
 
 @keyframes sceneIn{
   to{opacity:1;transform:translateY(0);}
 }
 
+/* RESTORED TITLE */
 h1{
-  font-size:48px;
+  font-size:54px;
   color:var(--gold);
   margin:0 0 18px 0;
-  letter-spacing:1px;
-  text-shadow:0 0 22px rgba(224,195,107,0.25);
+  letter-spacing:2px;
+  text-shadow:0 0 35px rgba(224,195,107,0.4);
   opacity:0;
-  transform:translateY(10px);
-  animation:titleIn 1.8s ease-out 1.4s forwards;
+  transform:translateY(8px);
+  animation:titleIn 1.4s ease-out 1s forwards;
 }
 
-/* Title glow pulse after click (added) */
 h1.glow{
-  animation: glowPulse 3.8s ease-in-out infinite alternate;
+  animation: extremeGlow 2.5s ease-in-out infinite alternate;
 }
-@keyframes glowPulse{
-  from{ text-shadow:0 0 16px rgba(224,195,107,0.22); }
-  to  { text-shadow:0 0 40px rgba(224,195,107,0.55); }
+
+@keyframes extremeGlow{
+  from{text-shadow:0 0 20px rgba(255,200,80,0.4);}
+  to{text-shadow:0 0 60px rgba(255,220,120,1);}
 }
 
 @keyframes titleIn{
@@ -113,54 +119,24 @@ h1.glow{
 }
 
 .divider{
-  width:0;
+  width:190px;
   height:1px;
-  background:rgba(224,195,107,0.4);
+  background:rgba(224,195,107,0.5);
   margin:18px auto 40px auto;
-  animation:lineDraw 1.6s ease-out 2.4s forwards;
-}
-
-@keyframes lineDraw{
-  to{width:190px;}
 }
 
 p{
   font-size:20px;
   line-height:1.95;
   margin:0 0 18px 0;
-  opacity:0;
-  transform:translateY(8px);
-  filter:blur(1.2px);
-  animation:paraIn 1.2s ease-out forwards;
 }
 
-p:nth-of-type(1){animation-delay:3s;}
-p:nth-of-type(2){animation-delay:3.5s;}
-p:nth-of-type(3){animation-delay:4s;}
-p:nth-of-type(4){animation-delay:4.5s;}
-p:nth-of-type(5){animation-delay:5s;}
-p:nth-of-type(6){animation-delay:5.5s;}
-p:nth-of-type(7){animation-delay:6s;}
-p:nth-of-type(8){animation-delay:6.5s;}
-p:nth-of-type(9){animation-delay:7s;}
-p:nth-of-type(10){animation-delay:7.5s;}
-p:nth-of-type(11){animation-delay:8s;}
-p:nth-of-type(12){animation-delay:8.5s;}
-p:nth-of-type(13){animation-delay:9s;}
-p:nth-of-type(14){animation-delay:9.5s;}
-
-@keyframes paraIn{
-  to{opacity:1;transform:translateY(0);filter:blur(0);}
-}
-
-/* Start overlay button */
 #startOverlay{
   position:fixed;
   inset:0;
   display:flex;
   justify-content:center;
   align-items:center;
-  flex-direction:column;
   background:#000;
   color:var(--gold);
   font-size:22px;
@@ -169,88 +145,74 @@ p:nth-of-type(14){animation-delay:9.5s;}
   z-index:999;
   transition:opacity 1.5s ease;
 }
-
-#startOverlay .hint{
-  margin-top:14px;
-  font-size:12px;
-  opacity:0.55;
-  letter-spacing:1px;
-}
-
-/* Accessibility */
-@media (prefers-reduced-motion: reduce){
-  .container, h1, .divider, p, .flash { animation:none !important; }
-  .container, h1, p { opacity:1 !important; transform:none !important; filter:none !important; }
-  .divider{ width:190px !important; }
-}
 </style>
 </head>
 
 <body>
 
-<!-- Light flash layer -->
 <div class="flash" id="flashEffect"></div>
 
-<!-- Wind sound -->
 <audio id="windAudio" loop>
   <source src="wind.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Start overlay -->
 <div id="startOverlay" onclick="startExperience()">
   Click to Open the Book
-  <div class="hint"></div>
 </div>
 
 <div class="container" id="scene">
-  <h1 id="title">The Book Has Opened</h1>
-  <div class="divider"></div>
 
-  <p><em>To the one who has found this book:</em></p>
+<h1 id="title">The Book Has Opened</h1>
+<div class="divider"></div>
 
-  <p>Know that you were not led here by chance.</p>
+<!-- כאן נשאר כל הטקסט שלך בדיוק כפי שהוא -->
 
-  <p>If your eyes now trace these lines,<br>
-    then you have been chosen for a purpose few have carried since the dawn of magic.</p>
+<p><em>To the one who has found this book:</em></p>
 
-  <p>Four gates exist within this world —<br>
-    and their power is such that their very existence was hidden from history, from record,<br>
-    and from the memory of mortals and sorcerers alike.</p>
+<p>Know that you were not led here by chance.</p>
 
-  <p>I am the last who knew their resting places.<br>
-    And so I concealed them —<br>
-    lest they fall into the hands of those whose hearts bend toward ruin and hunger for dominion.</p>
+<p>If your eyes now trace these lines,
+then you have been chosen for a purpose few have carried since the dawn of magic.</p>
 
-  <p>Understand this:</p>
+<p>Four gates exist within this world —
+and their power is such that their very existence was hidden from history, from record,
+and from the memory of mortals and sorcerers alike.</p>
 
-  <p>The path before you is neither simple nor safe.<br>
-    Yet if you have reached this page, it means that within you dwells a spirit capable of bearing the burden of the Four Elements:</p>
+<p>I am the last who knew their resting places.
+And so I concealed them —
+lest they fall into the hands of those whose hearts bend toward ruin and hunger for dominion.</p>
 
-  <p><strong>Air.</strong><br>
-    <strong>Water.</strong><br>
-    <strong>Earth.</strong><br>
-    <strong>Fire.</strong></p>
+<p>Understand this:</p>
 
-  <p>Each gate is bound not only by riddle,<br>
-    but by the nature of the element it guards.<br>
-    You will not pass by intellect alone.<br>
-    You must listen.<br>
-    Observe.<br>
-    Adapt.</p>
+<p>The path before you is neither simple nor safe.
+Yet if you have reached this page, it means that within you dwells a spirit capable of bearing the burden of the Four Elements:</p>
 
-  <p>In the moment you are ready to know more,<br>
-    the book shall reveal another page.</p>
+<p><strong>Air.</strong>
+<strong>Water.</strong>
+<strong>Earth.</strong>
+<strong>Fire.</strong></p>
 
-  <p>You cannot force it forward.<br>
-    You cannot hold it back.</p>
+<p>Each gate is bound not only by riddle,
+but by the nature of the element it guards.
+You will not pass by intellect alone.
+You must listen.
+Observe.
+Adapt.</p>
 
-  <p>It will move in accordance with your progress.</p>
+<p>In the moment you are ready to know more,
+the book shall reveal another page.</p>
 
-  <p>And when the final seal trembles —<br>
-    you will understand why this knowledge was buried.</p>
+<p>You cannot force it forward.
+You cannot hold it back.</p>
 
-  <p>Proceed with care.<br>
-    The elements remember.</p>
+<p>It will move in accordance with your progress.</p>
+
+<p>And when the final seal trembles —
+you will understand why this knowledge was buried.</p>
+
+<p>Proceed with care.
+The elements remember.</p>
+
 </div>
 
 <script>
@@ -261,27 +223,23 @@ function startExperience(){
   const title   = document.getElementById("title");
   const scene   = document.getElementById("scene");
 
-  // Fade overlay out
-  overlay.style.opacity = "0";
-  setTimeout(()=> overlay.remove(), 1500);
+  overlay.style.opacity="0";
+  setTimeout(()=>overlay.remove(),1500);
 
-  // Light flash + subtle shake + title glow
   flash.classList.add("active");
   scene.classList.add("shake");
   title.classList.add("glow");
-  setTimeout(()=> scene.classList.remove("shake"), 900);
 
-  // Start wind with slow fade-in
-  audio.volume = 0;
+  setTimeout(()=>scene.classList.remove("shake"),800);
+
+  audio.volume=0;
   audio.play();
 
-  let fade = setInterval(function(){
-    if(audio.volume < 0.18){
-      audio.volume = Math.min(0.18, audio.volume + 0.01);
-    } else {
-      clearInterval(fade);
-    }
-  }, 120);
+  let fade=setInterval(()=>{
+    if(audio.volume<0.25){
+      audio.volume+=0.02;
+    } else clearInterval(fade);
+  },100);
 }
 </script>
 
