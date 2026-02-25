@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GATE I — AIR</title>
+
+<style>
+:root{
+  --bg1:#0b0b0f;
+  --bg2:#15151b;
+  --gold:#e0c36b;
+  --ink:#d8caa6;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background: radial-gradient(circle at 50% 22%, var(--bg2), var(--bg1));
+  color:var(--ink);
+  font-family:Georgia, serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+.container{
+  width:min(800px, 92vw);
+  padding:80px 20px;
+}
+
+/* GATE */
+.gate{
+  font-size:18px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:rgba(224,195,107,0.85);
+  margin-bottom:10px;
+}
+
+/* AIR */
+h1{
+  font-size:56px;
+  color:var(--gold);
+  margin:0;
+  position:relative;
+  letter-spacing:2px;
+}
+
+/* glow כסוף — זהה לעמוד הקודם */
+h1.glow::after{
+  content:attr(data-text);
+  position:absolute;
+  inset:0;
+  color:transparent;
+  pointer-events:none;
+  animation: extremeGlow 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes extremeGlow{
+  from{
+    text-shadow:
+      0 0 18px rgba(220,235,255,0.35),
+      0 0 30px rgba(200,220,255,0.25);
+  }
+  to{
+    text-shadow:
+      0 0 45px rgba(240,250,255,0.9),
+      0 0 90px rgba(210,230,255,0.55);
+  }
+}
+
+.divider{
+  width:160px;
+  height:1px;
+  background:rgba(224,195,107,0.3);
+  margin:20px auto 50px auto;
+}
+
+/* טקסט חידה */
+p{
+  font-size:20px;
+  margin:15px 0;
+  opacity:0.85;
+}
+
+/* כפתור */
+button{
+  padding:14px 24px;
+  margin-top:30px;
+  background:#111;
+  border:1px solid rgba(255,255,255,0.25);
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#1a1a1a;
+}
+
+#msg{
+  margin-top:25px;
+  min-height:24px;
+  font-size:16px;
+  color:var(--gold);
+}
+
+#inputArea{
+  display:none;
+  margin-top:30px;
+}
+
+input{
+  padding:12px;
+  width:260px;
+  background:#111;
+  border:1px solid rgba(255,255,255,0.2);
+  color:#fff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="gate">GATE I</div>
+  <h1 class="glow" data-text="AIR">AIR</h1>
+  <div class="divider"></div>
+
+  <p>The air does not yield to force.</p>
+  <p>If you push, it resists.</p>
+
+  <button id="failBtn" onclick="failAttempt()">OPEN</button>
+
+  <div id="msg"></div>
+
+  <div id="inputArea">
+    <p>You may now enter what you practiced.</p>
+    <input id="answer" type="text" />
+    <button onclick="unlock()">UNLOCK</button>
+  </div>
+
+</div>
+
+<script>
+
+let inactivityTimer;
+let failedAttempts = 0;
+let unlocked = false;
+
+startInactivityTimer();
+
+function startInactivityTimer(){
+  inactivityTimer = setTimeout(showInput, 20000);
+}
+
+function resetInactivityTimer(){
+  clearTimeout(inactivityTimer);
+  startInactivityTimer();
+}
+
+function failAttempt(){
+  if(unlocked) return;
+
+  failedAttempts++;
+
+  const msg = document.getElementById("msg");
+
+  const responses = [
+    "Too soon.",
+    "Still forcing.",
+    "Again?",
+    "Air does not hurry.",
+    "Stop pushing."
+  ];
+
+  msg.textContent = responses[Math.min(failedAttempts-1, responses.length-1)];
+
+  resetInactivityTimer();
+}
+
+function showInput(){
+  unlocked = true;
+  document.getElementById("msg").textContent = "";
+  document.getElementById("failBtn").style.display = "none";
+  document.getElementById("inputArea").style.display = "block";
+}
+
+function unlock(){
+  const v = document.getElementById("answer").value.trim().toUpperCase();
+  const msg = document.getElementById("msg");
+
+  if(v === "PATIENCE"){
+    msg.textContent = "You have learned restraint.";
+    // window.location.href = "light.html";
+  } else {
+    msg.textContent = "That is not what you practiced.";
+  }
+}
+
+</script>
+
+</body>
+</html>
