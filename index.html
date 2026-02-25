@@ -36,6 +36,51 @@ body::before{
   z-index:1;
 }
 
+/* ====== ADDED: FLASH LAYER (SUPER STRONG) ====== */
+.flash{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:2000;
+  opacity:0;
+  mix-blend-mode:screen;
+  background: radial-gradient(circle at center,
+    rgba(255,245,200,1) 0%,
+    rgba(255,220,140,0.95) 18%,
+    rgba(255,190,90,0.75) 38%,
+    rgba(255,160,60,0.35) 58%,
+    rgba(0,0,0,0) 78%);
+}
+.flash.active{
+  animation: megaFlash 2.6s cubic-bezier(.05,.95,.2,1) forwards;
+}
+@keyframes megaFlash{
+  0%   { opacity:0; filter: blur(0px); }
+  6%   { opacity:1; filter: blur(0px); }
+  15%  { opacity:1; filter: blur(1px); }
+  30%  { opacity:0.8; filter: blur(2px); }
+  55%  { opacity:0.35; filter: blur(3px); }
+  100% { opacity:0; filter: blur(0px); }
+}
+
+/* ====== ADDED: VIOLENT SHAKE ====== */
+.shake{
+  animation: violentShake 1.6s cubic-bezier(.08,.92,.18,1);
+  transform-origin:center;
+}
+@keyframes violentShake{
+  0%   { transform: translate(0,0) scale(1); }
+  8%   { transform: translate(-22px,16px) scale(1.03) rotate(-0.8deg); }
+  16%  { transform: translate(24px,-18px) scale(1.04) rotate(0.9deg); }
+  24%  { transform: translate(-26px,20px) scale(1.05) rotate(-1.0deg); }
+  32%  { transform: translate(26px,-20px) scale(1.05) rotate(1.0deg); }
+  45%  { transform: translate(-16px,12px) scale(1.03) rotate(-0.6deg); }
+  60%  { transform: translate(16px,-12px) scale(1.03) rotate(0.6deg); }
+  75%  { transform: translate(-9px,7px) scale(1.02) rotate(-0.3deg); }
+  90%  { transform: translate(9px,-7px) scale(1.02) rotate(0.3deg); }
+  100% { transform: translate(0,0) scale(1) rotate(0deg); }
+}
+
 .container{
   position:relative;
   z-index:2;
@@ -60,6 +105,15 @@ h1{
   opacity:0;
   transform:translateY(10px);
   animation:titleIn 1.8s ease-out 1.4s forwards;
+}
+
+/* ====== ADDED: TITLE EXTREME GLOW AFTER CLICK ====== */
+h1.glow{
+  animation: extremeGlow 2.5s ease-in-out infinite alternate;
+}
+@keyframes extremeGlow{
+  from{ text-shadow:0 0 18px rgba(255,200,80,0.35); }
+  to  { text-shadow:0 0 70px rgba(255,230,140,1); }
 }
 
 @keyframes titleIn{
@@ -133,6 +187,9 @@ p:nth-of-type(12){animation-delay:8.5s;}
 
 <body>
 
+<!-- ====== ADDED: FLASH DIV ====== -->
+<div class="flash" id="flashEffect"></div>
+
 <!-- סאונד -->
 <audio id="windAudio" loop>
   <source src="wind.mp3" type="audio/mpeg">
@@ -141,11 +198,12 @@ p:nth-of-type(12){animation-delay:8.5s;}
 <!-- מסך פתיחה -->
 <div id="startOverlay" onclick="startExperience()">
   Click to Open the Book
- 
 </div>
 
-<div class="container">
-<h1>The Book Has Opened</h1>
+<!-- ====== ADDED: id FOR SHAKE TARGET ====== -->
+<div class="container" id="scene">
+
+<h1 id="title">The Book Has Opened</h1>
 <div class="divider"></div>
 
 <p><em>To the one who has found this book:</em></p>
@@ -201,8 +259,19 @@ function startExperience(){
   const overlay = document.getElementById("startOverlay");
   const audio = document.getElementById("windAudio");
 
+  // ====== ADDED ======
+  const flash = document.getElementById("flashEffect");
+  const scene = document.getElementById("scene");
+  const title = document.getElementById("title");
+
   overlay.style.opacity = "0";
   setTimeout(()=> overlay.remove(),1500);
+
+  // ====== ADDED: EFFECTS ======
+  flash.classList.add("active");
+  scene.classList.add("shake");
+  title.classList.add("glow");
+  setTimeout(()=> scene.classList.remove("shake"), 1600);
 
   audio.volume = 0;
   audio.play();
