@@ -168,16 +168,28 @@ function failAttempt(){
   failedAttempts++;
 
   const msg = document.getElementById("msg");
+  const btn = document.getElementById("failBtn");
 
   const responses = [
     "Too soon.",
-    "Still forcing.",
+    "You're still forcing.",
     "Again?",
     "Air does not hurry.",
-    "Stop pushing."
+    "Stop pushing.",
+    "This is not a marathon.",
+    "How many times do I have to repeat myself?",
+    "YOU STUPID NI-",
+    "OKAY. THAT'S IT! I DISABLED THE BUTTON — NOW YOU HAVE TO WAIT."
   ];
 
-  msg.textContent = responses[Math.min(failedAttempts-1, responses.length-1)];
+  const index = Math.min(failedAttempts - 1, responses.length - 1);
+
+  msg.textContent = responses[index];
+
+  // 👇 אם זו התגובה האחרונה — העלם את הכפתור
+  if(index === responses.length - 1){
+      btn.style.display = "none";
+  }
 
   resetInactivityTimer();
 }
