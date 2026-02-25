@@ -25,7 +25,7 @@ body{
   position:relative;
 }
 
-/* וינייט קולנועי — מאחורי הכל */
+/* vignette behind everything */
 body::before{
   content:"";
   position:fixed;
@@ -33,10 +33,10 @@ body::before{
   pointer-events:none;
   background:
     radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.8) 100%);
-  z-index:0; /* היה 1 */
+  z-index:0;
 }
 
-/* ===== FLASH (מעל הכל) ===== */
+/* FLASH (super strong) */
 .flash{
   position:fixed;
   inset:0;
@@ -63,7 +63,7 @@ body::before{
   100% { opacity:0; filter: blur(0px); }
 }
 
-/* ===== SHAKE ===== */
+/* SHAKE */
 .shake{
   animation: violentShake 1.6s cubic-bezier(.08,.92,.18,1);
   transform-origin:center;
@@ -97,6 +97,7 @@ body::before{
 }
 
 h1{
+  position:relative;
   font-size:48px;
   color:var(--gold);
   margin:0 0 18px 0;
@@ -107,17 +108,24 @@ h1{
   animation:titleIn 1.8s ease-out 1.4s forwards;
 }
 
-/* ===== TITLE GLOW ===== */
-h1.glow{
-  animation: extremeGlow 2.5s ease-in-out infinite alternate;
-}
-@keyframes extremeGlow{
-  from{ text-shadow:0 0 18px rgba(255,200,80,0.35); }
-  to  { text-shadow:0 0 70px rgba(255,230,140,1); }
-}
-
 @keyframes titleIn{
   to{opacity:1;transform:translateY(0);}
+}
+
+/* ✅ Glow pulse WITHOUT overriding titleIn:
+   we glow a pseudo-layer on top */
+h1.glow::after{
+  content: attr(data-text);
+  position:absolute;
+  inset:0;
+  color: transparent;
+  text-shadow: 0 0 22px rgba(255,210,110,0.35);
+  pointer-events:none;
+  animation: extremeGlow 2.2s ease-in-out infinite alternate;
+}
+@keyframes extremeGlow{
+  from{ text-shadow:0 0 18px rgba(255,200,80,0.35), 0 0 30px rgba(255,230,140,0.25); }
+  to  { text-shadow:0 0 45px rgba(255,220,120,0.9), 0 0 90px rgba(255,240,190,0.55); }
 }
 
 .divider{
@@ -159,7 +167,7 @@ p:nth-of-type(12){animation-delay:8.5s;}
   to{opacity:1;transform:translateY(0);filter:blur(0);}
 }
 
-/* Overlay דרמטי */
+/* Overlay */
 #startOverlay{
   position:fixed;
   inset:0;
@@ -172,7 +180,7 @@ p:nth-of-type(12){animation-delay:8.5s;}
   font-size:22px;
   letter-spacing:2px;
   cursor:pointer;
-  z-index:9999; /* מעל הכל */
+  z-index:9999;
   transition:opacity 1.5s ease;
 }
 </style>
@@ -191,7 +199,8 @@ p:nth-of-type(12){animation-delay:8.5s;}
 </div>
 
 <div class="container" id="scene">
-<h1 id="title">The Book Has Opened</h1>
+
+<h1 id="title" data-text="The Book Has Opened">The Book Has Opened</h1>
 <div class="divider"></div>
 
 <p><em>To the one who has found this book:</em></p>
@@ -253,13 +262,11 @@ function startExperience(){
   overlay.style.opacity = "0";
   setTimeout(()=> overlay.remove(),1500);
 
-  // effects
   flash.classList.add("active");
   scene.classList.add("shake");
   title.classList.add("glow");
   setTimeout(()=> scene.classList.remove("shake"),1600);
 
-  // wind fade-in
   audio.volume = 0;
   audio.play();
 
