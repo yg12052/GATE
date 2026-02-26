@@ -98,40 +98,34 @@ p{
   line-height:1.95;
 }
 
-.block{
-  margin:28px auto 0;
+/* ===== Cipher (part of the page; no box) ===== */
+.cipherWrap{
+  position:relative;
   width:min(760px, 92vw);
-  padding:22px 18px;
-  border-radius:18px;
-  border:1px solid rgba(224,195,107,0.22);
-  background:rgba(0,0,0,0.25);
-  box-shadow:0 14px 40px rgba(0,0,0,0.35);
-  position:relative; /* ✅ בשביל שכבת החושך */
-  overflow:hidden;   /* ✅ כדי שהמסכה לא תברח */
+  margin:34px auto 0;
+  padding:14px 0;
 }
 
-/* ciphertext */
+/* ciphertext: super subtle */
 .cipher{
   font-family: "Courier New", monospace;
   font-size:18px;
   letter-spacing:2px;
-  color:rgba(233,238,247,0.09);  /* ✅ כמעט בלתי נראה */
+  color:rgba(233,238,247,0.03); /* כמעט בלתי נראה */
   word-break:break-all;
   user-select:text;
-  transition: color .25s ease;
 }
 
-/* ✅ שכבת חושך עם "פנס" */
+/* darkness overlay (lamp OFF by default) */
 .darkveil{
   position:absolute;
-  inset:0;
+  inset:-8px 0 -8px 0;
   pointer-events:none;
-  /* החלק המרכזי (ה"פנס") יהיה שקוף דרך mask */
-  background:rgba(0,0,0,0.88);
-  /* ברירת מחדל: פנס קטן במרכז (לא עוזר בלי להזיז) */
-  -webkit-mask-image: radial-gradient(circle 60px at 50% 50%, transparent 0%, rgba(0,0,0,1) 70%);
-  mask-image: radial-gradient(circle 60px at 50% 50%, transparent 0%, rgba(0,0,0,1) 70%);
-  transition: -webkit-mask-image .05s linear, mask-image .05s linear;
+  background:rgba(0,0,0,0.92);
+
+  /* OFF: fully dark (no hole) */
+  -webkit-mask-image: radial-gradient(circle 0px at 50% 50%, transparent 0%, rgba(0,0,0,1) 0%);
+  mask-image: radial-gradient(circle 0px at 50% 50%, transparent 0%, rgba(0,0,0,1) 0%);
 }
 
 /* input area */
@@ -214,15 +208,6 @@ button:hover{
   font-size:14px;
   color:rgba(233,238,247,0.55);
 }
-
-/* (אופציונלי) רמז קטן שמרגיש כמו "לא רואים" */
-.microhint{
-  margin-top:10px;
-  font-size:12px;
-  letter-spacing:1px;
-  opacity:0.35;
-  user-select:none;
-}
 </style>
 </head>
 
@@ -236,10 +221,10 @@ button:hover{
     <p>When your senses are blind,<br>the air helps you find the way.</p>
     <p>Just remember — the key is breathing.</p>
 
-    <div class="block" id="cipherBlock">
+    <!-- cipher is part of the page; "lamp" reveals only while holding click/touch -->
+    <div class="cipherWrap" id="cipherBlock" aria-label="cipher area">
       <div class="cipher" id="cipherText">UYIABYAUUXJCONAPRRJXLT</div>
       <div class="darkveil" id="veil"></div>
-      <div class="microhint">move gently</div>
     </div>
 
     <div class="unlockArea">
@@ -282,36 +267,52 @@ document.addEventListener("keydown", (e)=>{
   }
 });
 
-/* ✅ "Flashlight" reveal: move/touch to reveal the cipher */
+/* ===== Lamp reveal: ONLY while holding click/touch (no hover reveal) ===== */
 const block = document.getElementById("cipherBlock");
 const veil  = document.getElementById("veil");
 
+let lampOn = false;
+
 function setLamp(clientX, clientY){
+  if(!lampOn) return;
+
   const r = block.getBoundingClientRect();
   const x = Math.max(0, Math.min(r.width,  clientX - r.left));
   const y = Math.max(0, Math.min(r.height, clientY - r.top));
 
-  // פנס קצת גדול (אפשר לשחק עם המספרים)
-  const radius = 90;
+  const radius = 85; // tweak 70-110
 
-  const g = `radial-gradient(circle ${radius}px at ${x}px ${y}px, transparent 0%, rgba(0,0,0,1) 70%)`;
+  const g = `radial-gradient(circle ${radius}px at ${x}px ${y}px, transparent 0%, rgba(0,0,0,1) 72%)`;
   veil.style.webkitMaskImage = g;
   veil.style.maskImage = g;
 }
 
-block.addEventListener("mousemove", (e)=>{
+function lampOff(){
+  lampOn = false;
+  const off = `radial-gradient(circle 0px at 50% 50%, transparent 0%, rgba(0,0,0,1) 0%)`;
+  veil.style.webkitMaskImage = off;
+  veil.style.maskImage = off;
+}
+
+/* Desktop: hold mouse down to "shine" */
+block.addEventListener("mousedown", (e)=>{
+  lampOn = true;
   setLamp(e.clientX, e.clientY);
 });
+document.addEventListener("mouseup", lampOff);
+block.addEventListener("mousemove", (e)=> setLamp(e.clientX, e.clientY));
 
+/* Mobile: hold finger to "shine" */
 block.addEventListener("touchstart", (e)=>{
-  if(!e.touches || !e.touches[0]) return;
-  setLamp(e.touches[0].clientX, e.touches[0].clientY);
+  lampOn = true;
+  if(e.touches && e.touches[0]) setLamp(e.touches[0].clientX, e.touches[0].clientY);
 }, {passive:true});
 
 block.addEventListener("touchmove", (e)=>{
-  if(!e.touches || !e.touches[0]) return;
-  setLamp(e.touches[0].clientX, e.touches[0].clientY);
+  if(e.touches && e.touches[0]) setLamp(e.touches[0].clientX, e.touches[0].clientY);
 }, {passive:true});
+
+document.addEventListener("touchend", lampOff, {passive:true});
 </script>
 </body>
 </html>
