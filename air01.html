@@ -119,13 +119,25 @@ input{
   border:1px solid rgba(255,255,255,0.2);
   color:#fff;
 }
+
+/* ✅ QR מתחת לתיבת התשובה */
+#qrBlock{
+  display:none;
+  margin-top:30px;
+  width:100%;
+  text-align:center;
+}
+#qrBlock img{
+  width:180px;
+  border-radius:12px;
+  display:block;
+  margin:20px auto 0 auto;
+}
 </style>
 </head>
 
 <body>
-<div id="qrBlock" style="display:none; margin-top:25px;">
-  <img src="qr_light.png" alt="Next QR" style="width:180px; border-radius:12px;">
-</div>
+
 <div class="container">
 
   <div class="gate">GATE I</div>
@@ -143,6 +155,11 @@ input{
     <p>You may now enter what you practiced.</p>
     <input id="answer" type="text" />
     <button onclick="unlock()">UNLOCK</button>
+
+    <!-- ✅ כאן ה-QR, בתוך inputArea כדי שיופיע מתחת לתיבה -->
+    <div id="qrBlock">
+      <img src="qr_light.png" alt="Next QR">
+    </div>
   </div>
 
 </div>
