@@ -123,7 +123,9 @@ input{
 </head>
 
 <body>
-
+<div id="qrBlock" style="display:none; margin-top:25px;">
+  <img src="qr_light.png" alt="Next QR" style="width:180px; border-radius:12px;">
+</div>
 <div class="container">
 
   <div class="gate">GATE I</div>
@@ -207,6 +209,7 @@ function unlock(){
 
   if(v === "PATIENCE"){
     msg.textContent = "You have learned restraint.";
+    document.getElementById("qrBlock").style.display = "block";
     // window.location.href = "light.html";
   } else {
     msg.textContent = "That is not what you practiced.";
