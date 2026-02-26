@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GATE I — AIR</title>
+
+<style>
+:root{
+  --bg1:#0b0b0f;
+  --bg2:#15151b;
+  --gold:#e0c36b;
+  --ink:#d8caa6;
+}
+
+/* base */
+body{
+  margin:0;
+  min-height:100vh;
+  background: radial-gradient(circle at 50% 22%, var(--bg2), var(--bg1));
+  color:var(--ink);
+  font-family: Georgia, serif;
+  display:flex;
+  justify-content:center;
+  overflow-x:hidden;
+  position:relative;
+  text-align:center;
+}
+
+/* vignette */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.85) 100%);
+  z-index:0;
+}
+
+.container{
+  position:relative;
+  z-index:2;
+  width:min(900px, 92vw);
+  padding:80px 20px 110px;
+}
+
+/* header */
+.gate{
+  font-size:18px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:rgba(224,195,107,0.85);
+  margin-bottom:10px;
+}
+
+/* AIR + glow (silver) */
+h1{
+  font-size:56px;
+  color:var(--gold);
+  margin:0;
+  position:relative;
+  letter-spacing:2px;
+}
+h1.glow::after{
+  content:attr(data-text);
+  position:absolute;
+  inset:0;
+  color:transparent;
+  pointer-events:none;
+  animation: extremeGlow 2.2s ease-in-out infinite alternate;
+}
+@keyframes extremeGlow{
+  from{
+    text-shadow:
+      0 0 18px rgba(220,235,255,0.35),
+      0 0 30px rgba(200,220,255,0.25);
+  }
+  to{
+    text-shadow:
+      0 0 45px rgba(240,250,255,0.9),
+      0 0 90px rgba(210,230,255,0.55);
+  }
+}
+
+.divider{
+  width:160px;
+  height:1px;
+  background:rgba(224,195,107,0.3);
+  margin:20px auto 48px auto;
+}
+
+/* content */
+p{
+  font-size:20px;
+  margin:14px 0;
+  opacity:0.88;
+  line-height:1.95;
+}
+
+.block{
+  margin:28px auto 0;
+  width:min(760px, 92vw);
+  padding:22px 18px;
+  border-radius:18px;
+  border:1px solid rgba(224,195,107,0.22);
+  background:rgba(0,0,0,0.25);
+  box-shadow:0 14px 40px rgba(0,0,0,0.35);
+}
+
+/* ciphertext */
+.cipher{
+  font-family: "Courier New", monospace;
+  font-size:18px;
+  letter-spacing:2px;
+  color:rgba(233,238,247,0.78);
+  word-break:break-all;
+  user-select:text;
+}
+
+/* input area */
+.unlockArea{
+  margin:34px auto 0;
+  width:min(760px, 92vw);
+  padding:18px 18px 22px;
+  border-radius:18px;
+  border:1px solid rgba(233,238,247,0.14);
+  background:rgba(0,0,0,0.22);
+}
+
+.row{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+input{
+  width:min(520px, 90vw);
+  padding:16px 16px;
+  font-size:18px;
+  border-radius:14px;
+  border:1px solid rgba(233,238,247,0.22);
+  background:rgba(0,0,0,0.35);
+  color:rgba(233,238,247,0.95);
+  outline:none;
+}
+input::placeholder{ color:rgba(233,238,247,0.35); }
+
+button{
+  padding:14px 18px;
+  font-size:16px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  border-radius:12px;
+  border:1px solid rgba(233,238,247,0.25);
+  background:rgba(0,0,0,0.30);
+  color:rgba(233,238,247,0.90);
+  cursor:pointer;
+}
+button:hover{
+  border-color:rgba(233,238,247,0.45);
+}
+
+/* msg + success */
+#msg{
+  margin-top:14px;
+  min-height:26px;
+  font-size:18px;
+  color:rgba(233,238,247,0.85);
+}
+
+#successBlock{
+  display:none;
+  margin-top:16px;
+}
+#successBlock.show{ display:block; }
+
+.qr{
+  margin:14px auto 0;
+  width:180px;
+  height:180px;
+  border-radius:14px;
+  border:1px solid rgba(233,238,247,0.22);
+  background:rgba(255,255,255,0.06);
+  overflow:hidden;
+}
+.qr img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.note{
+  margin-top:10px;
+  font-size:14px;
+  color:rgba(233,238,247,0.55);
+}
+</style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="gate">GATE I</div>
+    <h1 class="glow" data-text="AIR">AIR</h1>
+    <div class="divider"></div>
+
+    <p>When your senses are blind,<br>the air helps you find the way.</p>
+    <p>Just remember — the key is breathing.</p>
+
+    <div class="block">
+      <div class="cipher" id="cipherText">UYIABYAUUXJCONAPRJXLT</div>
+    </div>
+
+    <div class="unlockArea">
+      <p>Enter what the air has taught you here.</p>
+
+      <div class="row">
+        <input id="answer" type="text" placeholder="Enter the word..." autocomplete="off" />
+        <button onclick="tryUnlock()">UNLOCK</button>
+      </div>
+
+      <div id="msg"></div>
+
+      <div id="successBlock">
+        <div class="note">Scan what the light reveals.</div>
+        <div class="qr">
+          <!-- replace later with real QR image -->
+          <img src="qr_illusion.png" alt="Next QR">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+function tryUnlock(){
+  const msg = document.getElementById("msg");
+  const val = (document.getElementById("answer").value || "").trim().toUpperCase();
+
+  if(val === "LIGHT"){
+    msg.textContent = "Accepted. The air yields.";
+    document.getElementById("successBlock").classList.add("show");
+  } else {
+    msg.textContent = "No. That does not reveal the way.";
+  }
+}
+
+/* Enter key submits */
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Enter"){
+    tryUnlock();
+  }
+});
+</script>
+</body>
+</html>
